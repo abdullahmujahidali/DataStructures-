@@ -1,144 +1,148 @@
-#include<iostream>
+#include <iostream>
+#include <iostream>
 using namespace std;
-struct node
-{
-	int data;
-	node *next;
-};
-class list
-{
-private:
-	node *head, *tail;
+class node{
 public:
-	list()
-	{
-		head = NULL;
-		tail = NULL;
-	}
-	void createnode(int value)
-	{
+    int data;
+    node *next;
+    node(){
+    next=NULL;
+    }
+    node (int val){
+    this->data=val;
+    }
+};
+class list{
+private:
+    node *head;
+    node *tail;
+public:
+    int count;
+    list(){
+    head=NULL;
+    tail=NULL;
+    count=0;
+    }
+    void createnode(int val){
+    node *temp=new node;
+    temp->data=val;
+    if(head==NULL){
+        head=temp;
+        tail=temp;
+        temp=NULL;
+    count++;
+    }
+    }
+    void insertAtTail(int val){
 		node *temp = new node;
-		temp->data = value;
+		if(head!=NULL){
+		temp->data=val;
 		temp->next = NULL;
-		if (head == NULL)
-		{
-			head = temp;
-			tail = temp;
-			temp = NULL;
-		}
-		else
-		{
 			tail->next = temp;
 			tail = temp;
-			tail = NULL;
-		}
+			cout<<"node inserted"<<endl;
+	count++;
 	}
-	void display()
-	{
+    }
+    bool update(int value, int up){
 		node *temp = new node;
 		temp = head;
-		while (temp != NULL)
-		{
-			cout << temp->data << "\t";
-			temp = temp->next;
+		if (head == NULL){
+			return false;
 		}
-	}
-	void insert_start(int value)
-	{
-		node *temp = new node;
-		temp->data = value;
-		temp->next = head;
-		head = temp;
-	}
-	void insert_position(int pos, int value)
-	{
-		node *pre = new node;
-		node *cur = new node;
-		node *temp = new node;
-		cur = head;
-		for (int i = 1; i<pos; i++)
-		{
-			pre = cur;
-			cur = cur->next;
-		}
-		temp->data = value;
-		pre->next = temp;
-		temp->next = cur;
-	}
-	void delete_first()
-	{
-		node *temp = new node;
-		temp = head;
-		head = head->next;
-		delete temp;
-	}
-	void delete_last()
-	{
-		node *current = new node;
-		node *previous = new node;
-		current = head;
-		while (current->next != NULL)
-		{
-			previous = current;
-			current = current->next;
-		}
-		tail = previous;
-		previous->next = NULL;
-		delete current;
-	}
-	void delete_position(int pos)
-	{
-		node *current = new node;
-		node *previous = new node;
-		current = head;
-		for (int i = 1; i<pos; i++)
-		{
-			previous = current;
-			current = current->next;
-		}
-		previous->next = current->next;
-	}
-	void max(){
-		int maxi = INT_MIN;
-		node *temp = new node;
-		temp = head;
-		while (temp != NULL){
-			if (maxi<temp->data)
-				maxi = temp->data;
-			temp = temp->next;
-
-		}
-		cout << maxi << endl;
-	}
-	void min(){
-		int mini = INT_MAX;
-		node *temp = new node;
-		temp = head;
-		while (temp != NULL){
-			if (mini>temp->data)
-				mini = temp->data;
-			temp = temp->next;
-		}
-		cout << mini << endl;
-	}
-	void evencheck(){
-		node *temp = new node;
-		temp = head;
-		while (temp != NULL){
-			if (temp->data % 2 == 0)
-				cout << "Even: " << temp->data << "\t";
-			temp = temp->next;
-		}
-	}
-	void oddcheck(){
-		node *temp = new node;
-		temp = head;
-		while (temp != NULL){
-			if (temp->data % 2 == 1){
-				cout << "Odd: " << temp->data << "\t";
+		else {
+			while (temp != NULL){
+				if (temp->data == value){
+					temp->data=up;
+					return true;
+				}
 				temp = temp->next;
 			}
 		}
 	}
+	int Findsum(){
+	int sum = 0;
+	node *temp = new node;
+	temp = head;
+	while (temp != NULL){
+		sum=temp->data+sum;
+		temp=temp->next;
+	}
 
+return sum;
+}
+void deleteVal (int val){
+
+    node *temp=new node;
+    node *pre= new node;
+    temp=head;
+   if(head->data==val){
+    node *temp=head;
+    head= head->next;
+    temp->next=NULL;
+    delete temp;
+   }
+    else{while(temp!=NULL){
+        if(temp->data==val){
+        pre->next=temp->next;
+        temp->next=NULL;
+        delete temp;
+        }
+        pre=temp;
+        temp=temp->next;
+    }
+
+}
+}
+void insertPosition(int val, int pos){
+	node *pre = new node;
+	node *cur = new node;
+	node *temp = new node;
+	cur = head;
+
+  if(count>pos){
+	for (int i = pos; i > 0; i--){
+		pre = cur;
+		cur = cur->next;
+	}
+	temp->data = val;
+	pre->next = temp;
+	temp->next = cur;
+}
+/*else{
+    cout<<"List is out of bound"<<endl;
+}*/
+}
+void display()
+{
+    node *temp = head;
+    if (temp == NULL){
+    cout << "List is empty" << endl;
+    }
+    else{
+        while (temp != NULL)
+        {
+         cout << temp->data << endl;
+         temp = temp->next;
+			}
+		}
+	}
 };
+
+int main()
+{
+   list l;
+   l.createnode(454);
+   l.insertAtTail(45);
+   l.insertAtTail(78);
+   l.insertAtTail(777);
+   l.update(454,77);
+   l.display();
+    cout<<"Sum is: "<<   l.Findsum()<<endl;
+   l.deleteVal(77);
+   l.display();
+   l.insertPosition(12,2);
+   cout<<endl<<"value inserted"<<endl;
+   l.display();
+    return 0;
+}
